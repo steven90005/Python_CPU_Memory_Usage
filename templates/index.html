@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on('server_response', function(msg) {
+                $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+            });
+            socket.on('server_system_info', function(msg) {
+                $('#cpu_usage').text(msg.cpu_usage + '%');
+                $('#memory_usage').text(msg.memory_usage + '%');
+                $('#disk_usage').text(msg.disk_usage + '%');
+            });
+            socket.emit('get_usage');
+        });
+    </script>
+</head>
+<body>
+    <div id="log"></div>
+    <p>CPU Usage: <span id="cpu_usage"></span></p>
+    <p>Memory Usage: <span id="memory_usage"></span></p>
+    <p>Disk Usage: <span id="disk_usage"></span></p>
+</body>
+</html>
